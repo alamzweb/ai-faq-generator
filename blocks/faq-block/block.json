@@ -1,0 +1,13 @@
+{
+    "apiVersion": 2,
+    "name": "ai-faq-generator/faq-block",
+    "version": "1.0.0",
+    "title": "AI FAQ Generator Node Component",
+    "category": "widgets",
+    "icon": "welcome-learn-more",
+    "description": "Render saved functional SEO friendly layouts context profiles sets anywhere dynamically via Gutenberg panels.",
+    "supports": {
+        "html": false
+    },
+    "textdomain": "ai-faq-generator"
+}

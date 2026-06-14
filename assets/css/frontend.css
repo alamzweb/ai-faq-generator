@@ -1,0 +1,104 @@
+/* Core Global Frontend Flexbox Accordion Configurations Variable Engines */
+.aifg-frontend-accordion-container {
+    margin: 20px 0;
+    font-family: system-ui, -apple-system, sans-serif;
+}
+
+.aifg-layout-modern .aifg-accordion-item {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    overflow: hidden;
+    background: #fff;
+}
+
+.aifg-layout-modern .aifg-accordion-trigger {
+    width: 100%;
+    text-align: left;
+    padding: 16px 20px;
+    background: #fff;
+    border: none;
+    font-size: 16px;
+    font-weight: 600;
+    color: #111827;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.aifg-layout-modern .aifg-accordion-trigger::after {
+    content: '+';
+    font-size: 20px;
+    color: #6b7280;
+}
+
+.aifg-layout-modern .aifg-accordion-item.active .aifg-accordion-trigger::after {
+    content: '−';
+}
+
+.aifg-layout-modern .aifg-accordion-content {
+    padding: 0 20px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.25s cubic-bezier(0.4, 0, 0.2, 1), padding 0.25s ease;
+    color: #4b5563;
+    line-height: 1.6;
+}
+
+.aifg-layout-modern .aifg-accordion-item.active .aifg-accordion-content {
+    padding-bottom: 16px;
+    max-height: 1000px;
+}
+
+/* Minimalist Style Configs Layout Patterns */
+.aifg-layout-minimal .aifg-accordion-item {
+    border-bottom: 1px solid #e5e7eb;
+    background: transparent;
+}
+.aifg-layout-minimal .aifg-accordion-trigger {
+    width: 100%; text-align: left; padding: 14px 0; border: none; background: transparent; font-size: 16px; font-weight: 500; cursor: pointer;
+}
+.aifg-layout-minimal .aifg-accordion-content {
+    padding: 0; max-height: 0; overflow: hidden; transition: max-height 0.2s ease; color: #4b5563;
+}
+.aifg-layout-minimal .aifg-accordion-item.active .aifg-accordion-content {
+    padding-bottom: 14px; max-height: 800px;
+}
+
+/* Multi column responsive cards configurations framework patterns layouts */
+.aifg-layout-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+}
+
+.aifg-layout-cards .aifg-card-item {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.aifg-layout-cards .aifg-card-title {
+    font-weight: 600; font-size: 16px; color: #111827; margin: 0 0 8px 0;
+}
+
+.aifg-layout-cards .aifg-card-body {
+    color: #4b5563; font-size: 14px; line-height: 1.5; margin: 0;
+}
+
+/* Dark layout adjustments standard setups settings sets */
+.aifg-layout-dark .aifg-accordion-item {
+    background: #1f2937; border: 1px solid #374151; border-radius: 6px; margin-bottom: 8px;
+}
+.aifg-layout-dark .aifg-accordion-trigger {
+    width:100%; text-align:left; padding:16px; background:transparent; border:none; color:#f9fafb; font-weight:600; cursor:pointer;
+}
+.aifg-layout-dark .aifg-accordion-content {
+    padding:0 16px; max-height:0; overflow:hidden; color:#d1d5db; transition: max-height 0.2s;
+}
+.aifg-layout-dark .aifg-accordion-item.active .aifg-accordion-content {
+    padding-bottom:16px; max-height:600px;
+}

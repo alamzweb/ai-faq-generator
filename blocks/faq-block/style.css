@@ -1,0 +1,13 @@
+/* Universal Block Standard Architecture Layout Anchors */
+.wp-block-ai-faq-generator-faq-block {
+    clear: both;
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
+}
+
+/* Ensure inner accordion text modules respond cleanly across modern blocks engine rules */
+.wp-block-ai-faq-generator-faq-block .aifg-frontend-accordion-container {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100%;
+}
