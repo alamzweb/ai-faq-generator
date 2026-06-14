@@ -33,11 +33,14 @@ class AIFG_Admin {
 			array( $this, 'render_generate_page' )
 		);
 
+		// FIXED: Provided all 5 required parameters to add_submenu_page to resolve the fatal crash
 		add_submenu_page(
 			'aifg-dashboard',
 			'All FAQ Sets',
 			'All FAQ Sets',
-			'edit.php?post_type=aifg_faq_set'
+			'manage_options',
+			'edit.php?post_type=aifg_faq_set',
+			'__return_null'
 		);
 
 		add_submenu_page(
