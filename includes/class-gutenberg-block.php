@@ -9,11 +9,15 @@ class AIFG_Gutenberg_Block {
 	}
 
 	public function register_faq_gutenberg_block() {
-		// Register fallback compatibility parameters map structures natively.
-		register_block_type( 'ai-faq-generator/faq-block', array(
-			'editor_script'   => 'aifg-block-js',
-			'editor_style'    => 'aifg-block-editor-css',
-			'style'           => 'aifg-block-frontend-css',
+		// Prevent activation crashes by ensuring the block metadata folder exists
+		$block_json_dir = AIFG_PLUGIN_DIR . 'blocks/faq-block';
+		
+		if ( ! file_exists( $block_json_dir . '/block.json' ) ) {
+			return;
+		}
+
+		// Standard WordPress production layout registration pattern using block.json path directly
+		register_block_type( $block_json_dir, array(
 			'render_callback' => array( $this, 'render_block_fallback_callback' ),
 			'attributes'      => array(
 				'selectedFaqSet' => array(
@@ -27,7 +31,6 @@ class AIFG_Gutenberg_Block {
 			)
 		));
 
-		// Hook asset dependencies safely using Core WordPress framework logic arrays.
 		add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_block_editor_assets' ) );
 	}
 
@@ -35,7 +38,7 @@ class AIFG_Gutenberg_Block {
 		wp_enqueue_script( 'aifg-block-js', AIFG_PLUGIN_URL . 'assets/js/block.js', array( 'wp-blocks', 'wp-element', 'wp-editor', 'wp-components' ), AIFG_VERSION, true );
 		wp_enqueue_style( 'aifg-block-editor-css', AIFG_PLUGIN_URL . 'assets/css/block.css', array(), AIFG_VERSION );
 		
-		// Map saved profiles dynamically down into local options inside DOM block memory fields.
+		// Map existing saved data sets into backend select values safely
 		$faq_sets = get_posts( array( 'post_type' => 'aifg_faq_set', 'numberposts' => -1 ) );
 		$options  = array( array( 'label' => '-- Choose Layout Target --', 'value' => '' ) );
 		
