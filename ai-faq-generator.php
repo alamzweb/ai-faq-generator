@@ -25,34 +25,31 @@ define( 'AIFG_PLUGIN_FILE', __FILE__ );
 define( 'AIFG_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'AIFG_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
-// Autoload class mapping.
-require_ignore_exception( AIFG_PLUGIN_DIR . 'includes/class-activator.php' );
-require_ignore_exception( AIFG_PLUGIN_DIR . 'includes/class-deactivator.php' );
-require_ignore_exception( AIFG_PLUGIN_DIR . 'includes/class-plugin.php' );
-require_ignore_exception( AIFG_PLUGIN_DIR . 'includes/class-admin.php' );
-require_ignore_exception( AIFG_PLUGIN_DIR . 'includes/class-settings.php' );
-require_ignore_exception( AIFG_PLUGIN_DIR . 'includes/class-generator.php' );
-require_ignore_exception( AIFG_PLUGIN_DIR . 'includes/class-faq-set.php' );
-require_ignore_exception( AIFG_PLUGIN_DIR . 'includes/class-shortcode.php' );
-require_ignore_exception( AIFG_PLUGIN_DIR . 'includes/class-schema.php' );
-require_ignore_exception( AIFG_PLUGIN_DIR . 'includes/class-frontend.php' );
-require_ignore_exception( AIFG_PLUGIN_DIR . 'includes/class-gutenberg-block.php' );
-require_ignore_exception( AIFG_PLUGIN_DIR . 'includes/class-ajax.php' );
-
 /**
- * Safe helper to require files.
+ * Safely load required files if they exist.
+ * This is defined BEFORE it is called to prevent any fatal undefined function crashes.
  *
  * @param string $path File path.
  */
-function require_ignore_exception( $path ) {
+function aifg_require_file( $path ) {
 	if ( file_exists( $path ) ) {
 		require_once $path;
 	}
 }
 
-// Register Lifecycle Activation & Deactivation Hooks.
-register_activation_hook( __FILE__, array( 'AIFG_Activator', 'activate' ) );
-register_deactivation_hook( __FILE__, array( 'AIFG_Deactivator', 'deactivate' ) );
+// Safely bundle and load all modular plugin layout logic mapping files.
+aifg_require_file( AIFG_PLUGIN_DIR . 'includes/class-activator.php' );
+aifg_require_file( AIFG_PLUGIN_DIR . 'includes/class-deactivator.php' );
+aifg_require_file( AIFG_PLUGIN_DIR . 'includes/class-plugin.php' );
+aifg_require_file( AIFG_PLUGIN_DIR . 'includes/class-admin.php' );
+aifg_require_file( AIFG_PLUGIN_DIR . 'includes/class-settings.php' );
+aifg_require_file( AIFG_PLUGIN_DIR . 'includes/class-generator.php' );
+aifg_require_file( AIFG_PLUGIN_DIR . 'includes/class-faq-set.php' );
+aifg_require_file( AIFG_PLUGIN_DIR . 'includes/class-shortcode.php' );
+aifg_require_file( AIFG_PLUGIN_DIR . 'includes/class-schema.php' );
+aifg_require_file( AIFG_PLUGIN_DIR . 'includes/class-frontend.php' );
+aifg_require_file( AIFG_PLUGIN_DIR . 'includes/class-gutenberg-block.php' );
+aifg_require_file( AIFG_PLUGIN_DIR . 'includes/class-ajax.php' );
 
 /**
  * Initialize core runtime engine.
