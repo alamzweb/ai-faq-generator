@@ -5,37 +5,64 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class AIFG_Shortcode {
 	public function init() {
-		add_shortcode( 'aifaq', array( $this, 'render_shortcode' ) );
+		add_shortcode( 'ai_faq', array( $this, 'render_shortcode' ) );
 	}
 
 	public function render_shortcode( $atts ) {
-		$args = shortcode_atts( array(
-			'id'    => 0,
-			'layout'=> 'modern'
-		), $atts, 'aifaq' );
+		$pairs = shortcode_atts( array(
+			'id'     => '',
+			'layout' => 'modern'
+		), $atts );
 
-		$post_id = intval( $args['id'] );
-		if ( ! $post_id || 'aifg_faq_set' !== get_post_type( $post_id ) ) {
+		if ( empty( $pairs['id'] ) ) {
 			return '';
 		}
 
-		$faqs = get_post_meta( $post_id, '_aifg_faq_data', true );
-		if ( ! is_array( $faqs ) || empty( $faqs ) ) {
-			return '';
+		$post_id = intval( $pairs['id'] );
+		$faqs    = get_post_meta( $post_id, '_aifg_faq_data', true );
+
+		if ( ! $faqs || ! is_array( $faqs ) ) {
+			return '<p>' . __( 'No FAQ data found.', 'ai-faq-generator' ) . '</p>';
 		}
 
-		// Dynamic file template resolution isolation framework path patterns.
-		$layout = in_array( $args['layout'], array( 'modern', 'minimal', 'cards', 'dark' ), true ) ? $args['layout'] : 'modern';
-		$template_path = AIFG_PLUGIN_DIR . 'templates/' . $layout . '.php';
+		// Look up the plugin configuration settings safely
+		$settings = get_option( 'aifg_settings', array() );
+		$schema_html = '';
 
-		// Track dynamic visual usage execution layers inside database records.
-		$views = (int) get_post_meta( $post_id, '_aifg_faq_views_count', true );
-		update_post_meta( $post_id, '_aifg_faq_views_count', $views + 1 );
+		// Automatically bundle and inject valid JSON-LD structure right into the page context string
+		if ( ! isset( $settings['enable_schema'] ) || '1' === $settings['enable_schema'] ) {
+			$schema_data = array(
+				'@context'   => 'https://schema.org',
+				'@type'      => 'FAQPage',
+				'mainEntity' => array()
+			);
+
+			foreach ( $faqs as $faq ) {
+				$schema_data['mainEntity'][] = array(
+					'@type'          => 'Question',
+					'name'           => strip_tags( $faq['question'] ),
+					'acceptedAnswer' => array(
+						'@type'  => 'Answer',
+						'text'   => strip_tags( $faq['answer'] )
+					)
+				);
+			}
+
+			$schema_html = "\n" . '<script type="application/ld+json">' . wp_json_encode( $schema_data, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT ) . '</script>' . "\n";
+		}
+
+		// Locate and load the physical styling template wrapper
+		$template_path = AIFG_PLUGIN_DIR . 'templates/' . sanitize_file_name( $pairs['layout'] ) . '.php';
+		
+		if ( ! file_exists( $template_path ) ) {
+			$template_path = AIFG_PLUGIN_DIR . 'templates/modern.php';
+		}
 
 		ob_start();
-		if ( file_exists( $template_path ) ) {
-			include $template_path;
-		}
-		return ob_get_clean();
+		include $template_path;
+		$layout_html = ob_get_clean();
+
+		// Append the clean, auto-generated structural SEO block to the layout presentation markup
+		return $layout_html . $schema_html;
 	}
 }

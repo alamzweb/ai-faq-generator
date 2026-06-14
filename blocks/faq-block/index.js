@@ -1,62 +1,63 @@
 import { registerBlockType } from '@wordpress/blocks';
-import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
-import { PanelBody, SelectControl } from '@wordpress/components';
+import { useBlockProps } from '@wordpress/block-editor';
+import { SelectControl } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 
 registerBlockType('ai-faq-generator/faq-block', {
     edit: function ( { attributes, setAttributes } ) {
         const blockProps = useBlockProps({
-            className: 'aifg-gutenberg-editor-block-wrapper'
+            className: 'aifg-gutenberg-editor-canvas-card'
         });
 
-        // Pull the global variable populated dynamically by our PHP loader class
+        // Pull the active dataset options populated dynamically from our core PHP hook
         const faqSetsOptions = window.aifg_block_vars || [
             { label: '-- No FAQ Sets Found --', value: '' }
         ];
 
         return (
-            <>
-                <InspectorControls>
-                    <PanelBody title={ __( 'FAQ Layout Configuration', 'ai-faq-generator' ) } initialOpen={ true }>
+            <div { ...blockProps }>
+                <div className="aifg-block-inline-editor-header">
+                    <span className="dashicons dashicons-welcome-learn-more"></span>
+                    <h3>{ __( 'AI FAQ Generator — Block Configuration', 'ai-faq-generator' ) }</h3>
+                </div>
+                
+                <div className="aifg-block-inline-editor-body">
+                    <div className="aifg-control-row">
+                        <label>{ __( 'Select FAQ Set Target:', 'ai-faq-generator' ) }</label>
                         <SelectControl
-                            label={ __( 'Select FAQ Profile Set', 'ai-faq-generator' ) }
                             value={ attributes.selectedFaqSet }
                             options={ faqSetsOptions }
                             onChange={ ( value ) => setAttributes( { selectedFaqSet: value } ) }
                         />
+                    </div>
+
+                    <div className="aifg-control-row">
+                        <label>{ __( 'Choose Design Style Theme Layout:', 'ai-faq-generator' ) }</label>
                         <SelectControl
-                            label={ __( 'Frontend Theme Style Layout', 'ai-faq-generator' ) }
                             value={ attributes.layoutStyle }
                             options={ [
-                                { label: __( 'Modern Accordion', 'ai-faq-generator' ), value: 'modern' },
+                                { label: __( 'Modern Accordion Layout', 'ai-faq-generator' ), value: 'modern' },
                                 { label: __( 'Minimalist Line Frame', 'ai-faq-generator' ), value: 'minimal' },
                                 { label: __( 'Multi Column Card Grid', 'ai-faq-generator' ), value: 'cards' },
                                 { label: __( 'Dark Mode Variant Grid', 'ai-faq-generator' ), value: 'dark' }
                             ] }
                             onChange={ ( value ) => setAttributes( { layoutStyle: value } ) }
                         />
-                    </PanelBody>
-                </InspectorControls>
-
-                <div { ...blockProps }>
-                    <div className="aifg-editor-preview-inner-canvas">
-                        <span className="aifg-editor-block-icon dashicons dashicons-welcome-learn-more"></span>
-                        <div className="aifg-editor-block-info-text">
-                            <h4>{ __( 'AI FAQ Generator Integration Layer Node Block', 'ai-faq-generator' ) }</h4>
-                            <p>
-                                { attributes.selectedFaqSet 
-                                    ? `${ __( 'Active Reference Set ID:', 'ai-faq-generator' ) } #${ attributes.selectedFaqSet } [Theme: ${ attributes.layoutStyle }]`
-                                    : __( 'Please configure your FAQ Target Profile mapping in the sidebar options.', 'ai-faq-generator' ) 
-                                }
-                            </p>
-                        </div>
                     </div>
                 </div>
-            </>
+
+                <div className="aifg-block-inline-editor-footer">
+                    <p>
+                        { attributes.selectedFaqSet 
+                            ? `⚡ Live Target Mapping Connection Status: Live Link Active (ID: #${attributes.selectedFaqSet})`
+                            : '⚠️ Setup Required: Please assign an active FAQ Profile target using the dropdown selection fields above.'
+                        }
+                    </p>
+                </div>
+            </div>
         );
     },
     save: function () {
-        // Return null to delegate rendering output directly to our PHP dynamic callback method
-        return null;
+        return null; // Keep dynamic delivery active via the register_block_type fallback render callback
     }
 });
